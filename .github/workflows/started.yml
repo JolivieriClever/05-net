@@ -1,0 +1,23 @@
+name: dotnet paquete
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['3.1.x','6.0x']
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .Net $ {{ matrix.dotnet-version }}    
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Installe dependencies
+        run: dotnet restore
+      - name: build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore  --verbopsity normal
